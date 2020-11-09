@@ -7,8 +7,8 @@ app.use(require('cors')());
 const connection = require('./utilitaries/Connection');
 
 // Urls //
-const Login = require('./urls/Login');
-const Register = require('./urls/Register');
+const Login = require('./routes/Login');
+const Register = require('./routes/Register');
 
 const server = http.createServer(app);
 server.listen(connection.getPort());
