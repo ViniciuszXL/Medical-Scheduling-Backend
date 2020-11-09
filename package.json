@@ -1,0 +1,48 @@
+{
+  "name": "medical-scheduling-backend",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.20.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "express": "^4.17.1",
+    "express-promise-router": "^4.0.1",
+    "http": "0.0.1-security",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.6"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "description": "Backend do aplicativo de marcação de consulta, utilizando NodeJS.",
+  "main": "Main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ViniciuszXL/Medical-Scheduling-Backend.git"
+  },
+  "author": "ViniciuszXL",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ViniciuszXL/Medical-Scheduling-Backend/issues"
+  },
+  "homepage": "https://github.com/ViniciuszXL/Medical-Scheduling-Backend#readme"
+}
