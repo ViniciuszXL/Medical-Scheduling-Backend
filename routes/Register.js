@@ -11,7 +11,7 @@ function isNumber(number) {
 }
 
 const registerRoute = express.Router();
-registerRoute.get('/register', async (req, res) => {
+registerRoute.put('/register', async (req, res) => {
     var name = req.query.name;
     if (!validString(name))
         return res.json({ 'result': 'error', 'message': 'Por favor, informe o nome corretamente!' });

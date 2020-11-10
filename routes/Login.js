@@ -20,7 +20,7 @@ loginRoute.get('/login', async (req, res) => {
         return res.json({ 'result': 'error', 'message': 'Por favor, informe a senha corretamente!' });
 
     user.exists(cpf, function (err, data) {
-        if (!data) return res.json({ 'result': 'error', 'mesage': 'Esse CPF ainda não foi' });
+        if (!data) return res.json({ 'result': 'error', 'message': 'CPF informado não está cadastrado!' });
 
         user.login(cpf, password, function (err, data) {
             if (err) return res.json({ 'result': 'error', 'message': err });
