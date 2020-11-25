@@ -7,15 +7,19 @@ app.use(require('cors')());
 const connection = require('./utilitaries/Connection');
 
 // Urls //
+const Appointment = require('./routes/Appointment');
+const Clinics = require('./routes/Clinics');
+const Doctor = require('./routes/Doctor');
 const Login = require('./routes/Login');
 const Register = require('./routes/Register');
+const Specialty = require('./routes/Specialty');
 
 const server = http.createServer(app);
 server.listen(connection.getPort());
 console.log('Servidor inicializado na porta ' + connection.getPort());
 
 // criar as url //
-app.use('/', Login, Register);
+app.use('/', Appointment, Clinics, Doctor, Login, Register, Specialty);
 
 // Banco de Dados //
 console.log('Iniciando a criação das tabelas do banco de dados...');
