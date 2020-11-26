@@ -7,7 +7,8 @@ app.use(require('cors')());
 const connection = require('./utilitaries/Connection');
 
 // Urls //
-const Appointment = require('./routes/Appointment');
+const Appointment = require('./routes/Appointment/Appointment');
+const MarkAppointment = require('./routes/Appointment/MarkAppointment');
 const Clinics = require('./routes/Clinics');
 const Doctor = require('./routes/Doctor');
 const Login = require('./routes/Login');
@@ -19,7 +20,7 @@ server.listen(connection.getPort());
 console.log('Servidor inicializado na porta ' + connection.getPort());
 
 // criar as url //
-app.use('/', Appointment, Clinics, Doctor, Login, Register, Specialty);
+app.use('/', Appointment, MarkAppointment, Clinics, Doctor, Login, Register, Specialty);
 
 // Banco de Dados //
 console.log('Iniciando a criação das tabelas do banco de dados...');
@@ -77,10 +78,14 @@ try {
     sql = 'CREATE TABLE IF NOT EXISTS `appointment`('
         + '`id` BIGINT NOT NULL AUTO_INCREMENT,'
         + '`time` TIME NOT NULL,'
+        + '`clinic_id` INT NOT NULL,'
         + '`customer_id` BIGINT NOT NULL,'
         + '`doctor_id` BIGINT NOT NULL,'
+        + '`specialty_id` INT NOT NULL,'
+        + 'FOREIGN KEY (`clinic_id`) REFERENCES `clinic`(`id`),'
         + 'FOREIGN KEY (`customer_id`) REFERENCES `user`(`id`),'
         + 'FOREIGN KEY (`doctor_id`) REFERENCES `doctor`(`id`),'
+        + 'FOREIGN KEY (`specialty_id`) REFERENCES `specialty`(`id`),'
         + 'PRIMARY KEY (`id`)) ENGINE=InnoDB;';
     con.query(sql, function (err, result) {
         if (err) { console.log(err) } else { console.log('Tabela `appointment` criada com sucesso!') }

@@ -9,8 +9,7 @@ function isNumber(number) {
 const doctorRoute = express.Router();
 doctorRoute.get('/doctors', async (req, res) => {
     var id = parseInt(req.query.specialtyId);
-    if (isNumber(id) && !isNaN(id)) 
-        return getBySpecialty(id, res);
+    if (isNumber(id) && !isNaN(id)) return getBySpecialty(id, res);
 
     doctor.get(function (err, data) {
         if (parseError(err, data, res)) return;

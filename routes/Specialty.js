@@ -1,4 +1,5 @@
 const specialty = require('../utilitaries/API/Specialty');
+const clinic = require('../utilitaries/API/Clinic');
 const express = require('express');
 
 function isNumber(number) {
@@ -7,15 +8,27 @@ function isNumber(number) {
 
 const specialtyRoute = express.Router();
 specialtyRoute.get('/specialty', async (req, res) => {
-    var id = parseInt(req.query.id);
-    if (isNaN(id) || !isNumber(id))
+    var specialtyName = req.query.specialtyName;
+    if (specialtyName != null || specialtyName != undefined)
+        return searchSpecialtyByName(res, specialtyName);
+
+    var clinicId = parseInt(req.query.clinicId);
+    if (isNaN(clinicId) || !isNumber(clinicId))
         return res.json([{ 'result': 'error', 'message': 'Por favor, informe o ID da clínica.' }]);
 
-    specialty.clinicSpecialties(id, function(err, data) {
+    specialty.byId(clinicId, function(err, data) {
         if (err) return res.json([{ 'result': 'error', 'message': err }]);
         if (!data) return res.json([{ 'result': 'error', 'message': 'Não há especialidades disponíveis para esta clínica!' }]);
         return res.json(data);
     });
 });
+
+function searchSpecialtyByName(res, specialtyName) {
+    specialty.byName(specialtyName, function (err, data) {
+        if (err) return res.json([{ 'result': 'error', 'message': err }]);
+        if (!data) return res.json([{ 'result': 'error', 'message': 'Não foi possível encontrar esta especialidade.' }]);
+        return res.json(data);
+    });
+}
 
 module.exports = specialtyRoute;

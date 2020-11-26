@@ -11,7 +11,7 @@ function isNumber(number) {
 }
 
 const registerRoute = express.Router();
-registerRoute.put('/register', async (req, res) => {
+registerRoute.post('/register', async (req, res) => {
     var name = req.query.name;
     if (!validString(name))
         return res.json([{ 'result': 'error', 'message': 'Por favor, informe o nome corretamente!' }]);
@@ -28,13 +28,17 @@ registerRoute.put('/register', async (req, res) => {
     if (!validString(password))
         return res.json([{ 'result': 'error', 'message': 'Por favor, informe a senha corretamente!' }]);
 
+    console.log('Registering '+name+' values ['+email+','+cpf+'];');
+    console.log('Checking if there is a user registered with the same cpf in the database');
     user.exists(cpf, function (err, data) {
         if (err) return res.json([{ 'result': 'error', 'message': err }]);
         if (data) return res.json([{ 'result': 'error', 'message': 'Esse CPF já foi cadastrado!' }]);
 
+        console.log('Result returns a empty! Creating new user...');
         var passwordEncrypted = encrypt(password);
         user.create(email, name, cpf, passwordEncrypted, function (err, data) {
             if (err) return res.json([{ 'result': 'error', 'message': err }]);
+            if (!data) return res.json([{ 'result': 'error', 'message': 'Ocorreu um erro ao registrar seus dados.' }]);
             return res.json([{ 'result': 'success', 'message': 'Usuário cadastrado com sucesso!' }]);
         });
     });

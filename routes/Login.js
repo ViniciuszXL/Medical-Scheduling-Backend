@@ -25,10 +25,19 @@ loginRoute.get('/login', async (req, res) => {
 
         user.login(cpf, password, function (err, data) {
             if (err) return res.json([{ 'result': 'error', 'message': err }]);
-            if (!data) return res.json([{ 'result': 'error', 'message': 'A senha informada não é igual à cadastrada!' }]);
-            return res.json([{ 'result': 'success', 'message': 'Login realizado com sucesso!' }]);
+            var result = split(data, ';');
+            var equals = result[0];
+            if (!equals) return res.json([{ 'result': 'error', 'message': 'A senha informada não é igual à cadastrada!' }]);
+            
+            var name = result[1];
+            return res.json([{ 'result': 'success', 'message': 'Login realizado com sucesso!', 'name': name }]);
         });
     });
 });
+
+function split(str, separator) {
+    var string = str.split(separator);
+    return string;
+}
 
 module.exports = loginRoute;

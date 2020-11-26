@@ -1,4 +1,4 @@
-const user = require('../utilitaries/API/User');
+const user = require('../../utilitaries/API/User');
 const express = require('express');
 
 function isNumber(number) {
