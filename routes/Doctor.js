@@ -1,6 +1,5 @@
 const doctor = require('../utilitaries/API/Doctor');
 const express = require('express');
-const { getBySpecialtyId } = require('../utilitaries/API/Doctor');
 
 function isNumber(number) {
     return typeof number === "number";
@@ -8,17 +7,27 @@ function isNumber(number) {
 
 const doctorRoute = express.Router();
 doctorRoute.get('/doctors', async (req, res) => {
-    var id = parseInt(req.query.specialtyId);
-    if (isNumber(id) && !isNaN(id)) return getBySpecialty(id, res);
+    var specialtyId = parseInt(req.query.specialtyId);
+    if (isNumber(specialtyId) && !isNaN(specialtyId)) return getBySpecialty(specialtyId, res);
 
-    doctor.get(function (err, data) {
+    var doctorId = parseInt(req.query.doctorId);
+    if (isNumber(doctorId) && !isNaN(doctorId)) return getById(doctorId, res);
+
+    doctor.all(function (err, data) {
         if (parseError(err, data, res)) return;
         return res.json(data);
     });
 });
 
+function getById(id, res) {
+    doctor.byId(id, function (err, data) {
+        if (parseError(err, data, res)) return;
+        return res.json(data);
+    });
+}
+
 function getBySpecialty(id, res) {
-    doctor.getBySpecialtyId(id, function (err, data) {
+    doctor.bySpecialtyId(id, function (err, data) {
         if (parseError(err, data, res)) return;
         return res.json(data);
     });

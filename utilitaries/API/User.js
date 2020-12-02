@@ -59,36 +59,9 @@ function login(cpf, password, callback) {
     });
 }
 
-function markAppointment(time, clinicId, userId, doctorId, specialtyId, callback) {
-    var con = Connection.create();
-    var sql = "INSERT INTO `appointment` VALUES (NULL, ?, ?, ?, ?, ?);";
-    con.query(sql, [ time, clinicId, userId, doctorId, specialtyId ], function (err, result) {
-        try {
-            return callback(err ? err : null, err ? null : true);
-        } finally {
-            con.end();
-        }
-    });
-}
-
-function appointment(id, callback) {
-    var con = Connection.create();
-    var sql = 'SELECT * FROM `appointment` WHERE `customer_id`=?;';
-    con.query(sql, [ id ], function(err, result) {
-        try {
-            if (err) return callback(err, null);
-
-            var rows = result.length;
-            return callback(null, rows < 1 ? false : result);
-        } finally {
-            con.end();
-        }
-    });
-}
-
 function getByName(name, callback) {
     var con = Connection.create();
-    var sql = 'SELECT * FROM `user` WHERE `name`=?;';
+    var sql = 'SELECT `id`, `name`, `cpf` FROM `user` WHERE `name`=?;';
     con.query(sql, [ name ], function(err, result) {
         try {
             if (err) return callback(err, null);
@@ -101,4 +74,47 @@ function getByName(name, callback) {
     });
 }
 
-module.exports = { exists, existsById, create, login, appointment, getByName, markAppointment };
+// APPOINTMENT //
+function appointment(id, callback) {
+    var con = Connection.create();
+    var sql = 'SELECT * FROM `appointment` WHERE `customer_id`=? ORDER BY (`time`) ASC;';
+    con.query(sql, [ id ], function(err, result) {
+        try {
+            if (err) return callback(err, null);
+
+            var rows = result.length;
+            return callback(null, rows < 1 ? false : result);
+        } finally {
+            con.end();
+        }
+    });
+}
+
+function existsAppointment(specialtyId, callback) {
+    var con = Connection.create();
+    var sql = "SELECT * FROM `appointment` WHERE `specialty_id`=?";
+    con.query(sql, [ specialtyId ], function (err, result) {
+        try {
+            if (err) return callback(err, null);
+
+            var rows = result.length;
+            return callback(null, rows < 1 ? false : result);
+        } finally {
+            con.end();
+        }
+    });
+}
+
+function markAppointment(time, clinicId, userId, doctorId, specialtyId, callback) {
+    var con = Connection.create();
+    var sql = "INSERT INTO `appointment` VALUES (NULL, ?, ?, ?, ?, ?);";
+    con.query(sql, [ time, clinicId, userId, doctorId, specialtyId ], function (err, result) {
+        try {
+            return callback(err ? err : null, err ? null : true);
+        } finally {
+            con.end();
+        }
+    });
+}
+
+module.exports = { exists, existsById, create, login, getByName, appointment, existsAppointment, markAppointment };

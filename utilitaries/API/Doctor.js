@@ -1,6 +1,6 @@
 const Connection = require('../Connection');
 
-function get(callback) {
+function all(callback) {
     var con = Connection.create();
     var sql = 'SELECT D.name, S.name AS `specialtyName` ' + 
     'FROM `doctor` AS `D` ' +
@@ -15,7 +15,7 @@ function get(callback) {
     });
 }
 
-function getBySpecialtyId(id, callback) {
+function bySpecialtyId(id, callback) {
     var con = Connection.create();
     var sql = 'SELECT D.name ' + 
     'FROM `doctor` AS `D` ' +
@@ -31,7 +31,19 @@ function getBySpecialtyId(id, callback) {
     });
 }
 
-function getByName(name, callback) {
+function byId(id, callback) {
+    var con = Connection.create();
+    var sql = 'SELECT * FROM `doctor` WHERE `id`=?;';
+    con.query(sql, [ id ], function (err, result) {
+        try {
+            return callbackResult(err, result, callback);
+        } finally {
+            con.end();
+        }
+    });
+}
+
+function byName(name, callback) {
     var con = Connection.create();
     var sql = 'SELECT * FROM `doctor` WHERE `name`=?;';
     con.query(sql, [ name ], function (err, result) {
@@ -49,4 +61,4 @@ function callbackResult(err, result, callback) {
     return callback(null, rows < 1 ? false : result);
 }
 
-module.exports = { get, getBySpecialtyId, getByName };
+module.exports = { all, bySpecialtyId, byName, byId };

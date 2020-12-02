@@ -1,6 +1,5 @@
 const user = require('../../utilitaries/API/User');
 const clinic = require('../../utilitaries/API/Clinic');
-const specialty = require('../../utilitaries/API/Specialty');
 const doctor = require('../../utilitaries/API/Doctor');
 const express = require('express');
 
@@ -47,15 +46,23 @@ markAppointmentRoute.put('/markappointment', async (req, res) => {
             if (isNull(doctorName))
                 return res.json([{ 'result': 'error', 'message': 'Informe o nome do doutor!' }]);
 
-            doctor.getByName(doctorName, function (err, data) {
+            doctor.byName(doctorName, function (err, data) {
                 if (err) return res.json([{ 'result': 'error', 'message': err }]);
                 if (!data) return res.json([{ 'result': 'error', 'message': 'Não foi possível buscar o doutor!' }]);
                 var doctorId = data[0]['id'];
                 var specialtyId = data[0]['specialty'];
 
-                user.markAppointment(time, clinicId, userId, doctorId, specialtyId, function (err, data) {
+                user.existsAppointment(specialtyId, function (err, data) {
                     if (err) return res.json([{ 'result': 'error', 'message': err }]);
-                    return res.json([{ 'result': 'success', 'message': 'Consulta para dia ' + time + ' marcado com sucesso!' }])
+                    if (data) {
+                        var resultTime = data[0]['time'];
+                        return res.json([{ 'result': 'failed', 'message': 'Você já possui uma consulta para essa especialidade marcada para o dia ' + resultTime + '!' }]);
+                    }
+
+                    user.markAppointment(time, clinicId, userId, doctorId, specialtyId, function (err, data) {
+                        if (err) return res.json([{ 'result': 'error', 'message': err }]);
+                        return res.json([{ 'result': 'success', 'message': 'Consulta para dia ' + time + ' marcado com sucesso!' }])
+                    });
                 });
             });
         });

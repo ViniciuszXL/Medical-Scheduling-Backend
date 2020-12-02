@@ -14,13 +14,14 @@ const Doctor = require('./routes/Doctor');
 const Login = require('./routes/Login');
 const Register = require('./routes/Register');
 const Specialty = require('./routes/Specialty');
+const User = require('./routes/User');
 
 const server = http.createServer(app);
 server.listen(connection.getPort());
 console.log('Servidor inicializado na porta ' + connection.getPort());
 
 // criar as url //
-app.use('/', Appointment, MarkAppointment, Clinics, Doctor, Login, Register, Specialty);
+app.use('/', Appointment, MarkAppointment, Clinics, Doctor, Login, Register, Specialty, User);
 
 // Banco de Dados //
 console.log('Iniciando a criação das tabelas do banco de dados...');
@@ -77,7 +78,7 @@ try {
 
     sql = 'CREATE TABLE IF NOT EXISTS `appointment`('
         + '`id` BIGINT NOT NULL AUTO_INCREMENT,'
-        + '`time` TIME NOT NULL,'
+        + '`time` VARCHAR(10) NOT NULL,'
         + '`clinic_id` INT NOT NULL,'
         + '`customer_id` BIGINT NOT NULL,'
         + '`doctor_id` BIGINT NOT NULL,'
